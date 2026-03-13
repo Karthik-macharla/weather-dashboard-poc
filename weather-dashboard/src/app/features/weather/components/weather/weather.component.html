@@ -1,0 +1,74 @@
+<div class="weather-dashboard">
+  <header class="weather-dashboard__header">
+    <h1 class="weather-dashboard__title">Weather Dashboard</h1>
+  </header>
+
+  <section class="weather-dashboard__search">
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()" novalidate>
+      <div class="search-group">
+        <input
+          class="search-group__input"
+          type="text"
+          formControlName="cityName"
+          placeholder="Enter city name..."
+          aria-label="City name"
+        />
+        <button
+          class="search-group__button"
+          type="submit"
+          [disabled]="isLoading"
+        >
+          {{ isLoading ? 'Searching...' : 'Search' }}
+        </button>
+      </div>
+      <div
+        class="search-group__error"
+        *ngIf="cityNameControl?.invalid && cityNameControl?.touched"
+        role="alert"
+      >
+        <span *ngIf="cityNameControl?.errors?.['required']">City name is required.</span>
+        <span *ngIf="cityNameControl?.errors?.['maxlength']">City name must not exceed 50 characters.</span>
+      </div>
+    </form>
+  </section>
+
+  <div class="weather-dashboard__error" *ngIf="errorMessage" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <div class="weather-dashboard__loading" *ngIf="isLoading" aria-live="polite">
+    Loading weather data...
+  </div>
+
+  <section class="weather-dashboard__content" *ngIf="weather && !isLoading">
+    <app-weather-card [weather]="weather"></app-weather-card>
+
+    <div class="forecast" *ngIf="forecast">
+      <div class="forecast__hourly">
+        <h3 class="forecast__title">Today's Hourly Forecast</h3>
+        <div class="forecast__hourly-list">
+          <div class="forecast__hourly-item" *ngFor="let hour of forecast.todayHourly">
+            <span class="forecast__hourly-time">{{ hour.time | date:'shortTime' }}</span>
+            <span class="forecast__hourly-temp">{{ hour.temperature.celsius }}&deg;C</span>
+            <span class="forecast__hourly-desc">{{ hour.description }}</span>
+            <span class="forecast__hourly-rain">{{ hour.precipitationChance }}% rain</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="forecast__extended">
+        <h3 class="forecast__title">5-Day Forecast</h3>
+        <div class="forecast__daily-list">
+          <div class="forecast__daily-item" *ngFor="let day of forecast.extendedDaily">
+            <span class="forecast__daily-date">{{ day.date | date:'EEE, MMM d' }}</span>
+            <span class="forecast__daily-desc">{{ day.description }}</span>
+            <span class="forecast__daily-temp">
+              {{ day.high.celsius }}&deg; / {{ day.low.celsius }}&deg;C
+            </span>
+            <span class="forecast__daily-rain">{{ day.precipitationChance }}% rain</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

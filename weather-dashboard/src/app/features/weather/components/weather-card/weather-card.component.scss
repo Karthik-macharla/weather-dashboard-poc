@@ -1,0 +1,82 @@
+.weather-card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  padding: 24px;
+
+  &__location {
+    margin-bottom: 16px;
+  }
+
+  &__city {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333333;
+    margin: 0 0 4px;
+  }
+
+  &__region {
+    font-size: 1rem;
+    color: #666666;
+    margin: 0;
+  }
+
+  &__main {
+    margin-bottom: 16px;
+  }
+
+  &__temperature {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #ff9800;
+
+    &--secondary {
+      font-size: 1.4rem;
+      color: #999999;
+    }
+  }
+
+  &__description {
+    font-size: 1.2rem;
+    color: #555555;
+    margin: 4px 0;
+    text-transform: capitalize;
+  }
+
+  &__feels-like {
+    font-size: 0.9rem;
+    color: #888888;
+    margin: 4px 0;
+  }
+
+  &__details {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  &__detail {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__detail-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #999999;
+    letter-spacing: 0.05em;
+  }
+
+  &__detail-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333333;
+  }
+
+  &__timestamp {
+    font-size: 0.8rem;
+    color: #aaaaaa;
+    margin: 0;
+  }
+}

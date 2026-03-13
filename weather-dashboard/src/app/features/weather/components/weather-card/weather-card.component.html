@@ -1,0 +1,40 @@
+<div class="weather-card">
+  <div class="weather-card__location">
+    <h2 class="weather-card__city">{{ weather.location.city }}</h2>
+    <p class="weather-card__region">
+      {{ weather.location.state }}, {{ weather.location.country }}
+    </p>
+  </div>
+
+  <div class="weather-card__main">
+    <div class="weather-card__temperature">
+      {{ weather.current.temperature.celsius }}&deg;C
+      <span class="weather-card__temperature--secondary">
+        / {{ weather.current.temperature.fahrenheit }}&deg;F
+      </span>
+    </div>
+    <p class="weather-card__description">{{ weather.current.description }}</p>
+    <p class="weather-card__feels-like">
+      Feels like {{ weather.current.feelsLike.celsius }}&deg;C
+    </p>
+  </div>
+
+  <div class="weather-card__details">
+    <div class="weather-card__detail">
+      <span class="weather-card__detail-label">Humidity</span>
+      <span class="weather-card__detail-value">{{ weather.current.humidity }}%</span>
+    </div>
+    <div class="weather-card__detail">
+      <span class="weather-card__detail-label">Wind Speed</span>
+      <span class="weather-card__detail-value">{{ weather.current.windSpeed }} km/h</span>
+    </div>
+    <div class="weather-card__detail">
+      <span class="weather-card__detail-label">Pressure</span>
+      <span class="weather-card__detail-value">{{ weather.current.pressure }} hPa</span>
+    </div>
+  </div>
+
+  <p class="weather-card__timestamp">
+    Updated: {{ weather.current.timestamp | date:'short' }}
+  </p>
+</div>
