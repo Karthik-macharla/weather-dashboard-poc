@@ -202,4 +202,33 @@ describe('WeatherService', () => {
       expect(errorReceived).toBeTrue();
     });
   });
+
+  describe('security: XSRF token leakage mitigation (@angular/common < 19.2.16)', () => {
+    it('should not use a protocol-relative API URL (XSRF leakage prevention)', () => {
+      const url = environment.apiUrl;
+      expect(url.startsWith('//')).toBeFalse();
+    });
+
+    it('should throw when constructed with a protocol-relative API URL', () => {
+      const httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+      const originalApiUrl = environment.apiUrl;
+      (environment as { apiUrl: string }).apiUrl = '//attacker.example.com/api';
+      try {
+        expect(() => new WeatherService(httpClientSpy)).toThrowError(/Protocol-relative/);
+      } finally {
+        (environment as { apiUrl: string }).apiUrl = originalApiUrl;
+      }
+    });
+
+    it('should only issue HTTP GET requests (Angular never attaches XSRF headers to GETs)', () => {
+      const apiResponse: ApiResponse<WeatherResponse> = {
+        success: true, message: 'OK', data: mockWeatherResponse
+      };
+
+      service.getCurrentWeather('London').subscribe();
+      const req = httpMock.expectOne(`${environment.apiUrl}/weather/current/London`);
+      expect(req.request.method).toBe('GET');
+      req.flush(apiResponse);
+    });
+  });
 });

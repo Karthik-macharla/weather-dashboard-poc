@@ -13,14 +13,25 @@ import {
 /**
  * Service for weather data retrieval from the backend API.
  * Provides methods to get current weather, forecasts, and city search results.
+ *
+ * Security: All API calls are HTTP GET. XSRF token sending is disabled at the
+ * module level (see WeatherModule). The configured API URL is validated at
+ * construction time to prevent protocol-relative URL injection
+ * (mitigates @angular/common < 19.2.16 XSRF leakage vector).
  */
 @Injectable({
   providedIn: 'root'
 })
 export class WeatherService {
-  private readonly baseUrl = `${environment.apiUrl}/weather`;
+  private readonly baseUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    const apiUrl = environment.apiUrl;
+    if (apiUrl.startsWith('//')) {
+      throw new Error('Protocol-relative API URLs are not allowed. Use an explicit scheme (http:// or https://) or a root-relative path (/).');
+    }
+    this.baseUrl = `${apiUrl}/weather`;
+  }
 
   /**
    * Gets the current weather conditions for the specified city.
