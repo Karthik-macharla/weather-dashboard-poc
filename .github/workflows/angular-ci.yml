@@ -1,0 +1,42 @@
+name: Angular CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+          cache-dependency-path: weather-dashboard/package-lock.json
+
+      - name: Install dependencies
+        working-directory: weather-dashboard
+        run: npm ci
+
+      - name: Build (production)
+        working-directory: weather-dashboard
+        run: npm run build -- --configuration production
+
+      - name: Run tests
+        working-directory: weather-dashboard
+        run: npm test -- --watch=false --browsers=ChromeHeadless
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: angular-dist
+          path: weather-dashboard/dist/
