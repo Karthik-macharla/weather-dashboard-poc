@@ -29,3 +29,8 @@ TestResults/
 
 # Environment-specific
 appsettings.Development.json
+
+# Angular
+weather-dashboard/node_modules/
+weather-dashboard/dist/
+weather-dashboard/.angular/
